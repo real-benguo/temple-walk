@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>灵泉古寺 · 第一人称漫游</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="stage"></div>
+
+<div id="crosshair"></div>
+
+<div id="hud">
+  <span><b>W A S D</b> 走动</span>
+  <span><b>鼠标</b> 转视角</span>
+  <span><b>Shift</b> 疾走</span>
+  <span><b>Esc</b> 退出</span>
+</div>
+
+<div id="overlay">
+  <div class="panel">
+    <div class="seal">禅</div>
+    <h1>灵泉古寺</h1>
+    <p class="sub">山门 · 天王殿 · 钟鼓楼 · 大雄宝殿 · 藏经阁 · 七级浮屠</p>
+    <ul class="keys">
+      <li><b>W / A / S / D</b><i>前后左右走动</i></li>
+      <li><b>移动鼠标</b><i>转动视角</i></li>
+      <li><b>Shift</b><i>按住疾走</i></li>
+      <li><b>Esc</b><i>松开鼠标 / 退出</i></li>
+    </ul>
+    <button id="enter">进 入 山 门</button>
+    <p class="tip">走进殿内可以抬头看梁架，后院有放生池和石桥。</p>
+  </div>
+</div>
+
+<div id="loading">
+  <div class="bar"><i id="barfill"></i></div>
+  <p id="loadtxt">正在营造寺院…</p>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./lib/three.module.min.js",
+    "three/addons/": "./lib/addons/"
+  }
+}
+</script>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
