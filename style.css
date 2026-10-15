@@ -1,0 +1,148 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #0d0f12;
+  color: #e8e2d6;
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#stage, #stage canvas { display: block; width: 100%; height: 100%; }
+
+/* ---------------- 准星 ---------------- */
+#crosshair {
+  position: fixed; left: 50%; top: 50%;
+  width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .78);
+  box-shadow: 0 0 5px rgba(0, 0, 0, .75);
+  pointer-events: none;
+  opacity: 0; transition: opacity .25s;
+}
+body.playing #crosshair { opacity: 1; }
+
+/* ---------------- 底部按键提示 ---------------- */
+#hud {
+  position: fixed; left: 50%; bottom: 22px;
+  transform: translateX(-50%);
+  display: flex; gap: 22px;
+  padding: 9px 20px;
+  border-radius: 999px;
+  background: rgba(14, 16, 20, .55);
+  border: 1px solid rgba(214, 176, 94, .22);
+  backdrop-filter: blur(8px);
+  font-size: 12.5px; letter-spacing: .04em;
+  color: rgba(232, 226, 214, .72);
+  pointer-events: none;
+  opacity: 0; transition: opacity .3s;
+}
+body.playing #hud { opacity: 1; }
+#hud b { color: #d6b05e; font-weight: 600; margin-right: 5px; }
+
+/* ---------------- 遮罩 ---------------- */
+#overlay {
+  position: fixed; inset: 0;
+  display: grid; place-items: center;
+  background:
+    radial-gradient(120% 90% at 50% 12%, rgba(38, 26, 20, .55) 0%, rgba(8, 9, 11, .94) 62%),
+    linear-gradient(#0b0c0e, #14161a);
+  backdrop-filter: blur(3px);
+  transition: opacity .45s ease, visibility .45s;
+  z-index: 20;
+}
+#overlay.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.panel {
+  width: min(560px, 88vw);
+  text-align: center;
+  padding: 44px 40px 36px;
+  border: 1px solid rgba(214, 176, 94, .26);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(30, 26, 22, .78), rgba(16, 15, 14, .88));
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 236, 190, .07);
+  position: relative;
+}
+.panel::before, .panel::after {
+  content: ""; position: absolute; left: 16px; right: 16px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(214, 176, 94, .45), transparent);
+}
+.panel::before { top: 10px; }
+.panel::after { bottom: 10px; }
+
+.seal {
+  width: 46px; height: 46px; margin: 0 auto 18px;
+  display: grid; place-items: center;
+  border: 1.5px solid #a8322a;
+  color: #c8443a;
+  font-size: 22px;
+  border-radius: 3px;
+  background: rgba(140, 40, 32, .1);
+}
+
+.panel h1 {
+  font-size: 34px; font-weight: 500; letter-spacing: .34em;
+  text-indent: .34em;
+  color: #efe6d3;
+  text-shadow: 0 2px 24px rgba(214, 176, 94, .28);
+}
+.panel .sub {
+  margin-top: 12px; font-size: 12.5px; letter-spacing: .1em;
+  color: rgba(214, 176, 94, .62);
+}
+
+.keys {
+  list-style: none;
+  margin: 30px auto 26px;
+  width: 100%; max-width: 330px;
+  border-top: 1px solid rgba(255, 255, 255, .07);
+}
+.keys li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, .07);
+  font-size: 13px;
+}
+.keys b { color: #d6b05e; font-weight: 600; letter-spacing: .06em; }
+.keys i { font-style: normal; color: rgba(232, 226, 214, .55); }
+
+#enter {
+  margin-top: 4px;
+  padding: 13px 46px;
+  font-size: 15px; letter-spacing: .22em; text-indent: .22em;
+  font-family: inherit;
+  color: #1b1510;
+  background: linear-gradient(180deg, #e6c574, #c69b3c);
+  border: none; border-radius: 3px;
+  cursor: pointer;
+  transition: transform .16s, box-shadow .16s, filter .16s;
+  box-shadow: 0 8px 26px rgba(198, 155, 60, .3);
+}
+#enter:hover { transform: translateY(-1px); filter: brightness(1.07); box-shadow: 0 12px 34px rgba(198, 155, 60, .42); }
+#enter:active { transform: translateY(0); }
+
+.panel .tip {
+  margin-top: 20px; font-size: 11.5px; line-height: 1.7;
+  color: rgba(232, 226, 214, .34);
+}
+
+/* ---------------- 加载 ---------------- */
+#loading {
+  position: fixed; inset: 0; z-index: 40;
+  display: grid; place-content: center; justify-items: center; gap: 18px;
+  background: #0b0c0e;
+  transition: opacity .5s ease, visibility .5s;
+}
+#loading.hide { opacity: 0; visibility: hidden; }
+#loading .bar {
+  width: 220px; height: 2px;
+  background: rgba(255, 255, 255, .1);
+  overflow: hidden;
+}
+#loading .bar i {
+  display: block; width: 0%; height: 100%;
+  background: linear-gradient(90deg, #a8802f, #e6c574);
+  transition: width .25s;
+}
+#loading p { font-size: 12px; letter-spacing: .22em; color: rgba(214, 176, 94, .6); }
